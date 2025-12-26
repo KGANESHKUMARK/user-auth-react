@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './auth/AuthProvider';
+import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
+import Profile from './components/Profile';
+import Login from './components/Login';
+import Signup from './components/Signup';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
@@ -16,8 +16,8 @@ function App() {
         <main className="mx-auto w-full max-w-5xl px-4 py-6">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route
               path="/dashboard"
               element={
