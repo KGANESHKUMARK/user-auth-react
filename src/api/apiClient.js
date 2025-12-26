@@ -1,14 +1,13 @@
 import { API_BASE } from '../config';
-import { getAuthContext } from '../auth/authContextAccessor';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * apiFetch wraps fetch to attach Authorization header with in-memory access token
  * and retries once on 401 after hitting /auth/refresh which uses httpOnly cookie.
  */
 export async function apiFetch(path, options = {}) {
-  const auth = getAuthContext();
-  const token = auth?.getAccessToken();
-
+  // This is a utility; for component usage prefer useAuth().apiCall
+  const token = localStorage.getItem('accessToken'); // fallback if called outside React
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {})
@@ -22,7 +21,7 @@ export async function apiFetch(path, options = {}) {
   });
 
   if (response.status === 401) {
-    const refreshed = await attemptRefresh(auth);
+    const refreshed = await attemptRefresh();
     if (refreshed) {
       headers.Authorization = `Bearer ${refreshed}`;
       response = await fetch(`${API_BASE}${path}`, {
@@ -31,7 +30,7 @@ export async function apiFetch(path, options = {}) {
         credentials: 'include'
       });
     } else {
-      auth?.signOut();
+      localStorage.removeItem('accessToken');
       throw new Error('Unauthorized');
     }
   }
@@ -39,7 +38,7 @@ export async function apiFetch(path, options = {}) {
   return response;
 }
 
-async function attemptRefresh(auth) {
+async function attemptRefresh() {
   try {
     const refreshRes = await fetch(`${API_BASE}/auth/refresh`, {
       method: 'POST',
@@ -48,7 +47,7 @@ async function attemptRefresh(auth) {
     if (!refreshRes.ok) return null;
     const { accessToken } = await refreshRes.json();
     if (accessToken) {
-      auth?.setAccessToken(accessToken);
+      localStorage.setItem('accessToken', accessToken);
       return accessToken;
     }
     return null;

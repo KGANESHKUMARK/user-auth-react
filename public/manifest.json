@@ -1,6 +1,6 @@
 {
-  "name": "Windsurf",
-  "short_name": "Windsurf",
+  "name": "User Auth",
+  "short_name": "User Auth",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

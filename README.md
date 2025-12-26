@@ -1,6 +1,6 @@
-# windsurf-frontend
+# user-auth-frontend
 
-Secure React + Supabase Auth starter implementing httpOnly refresh cookie (backend) with in-memory access token (frontend). Works with Spring Cloud Gateway + Swagger testing and is mobile-friendly.
+Secure React + Supabase Auth frontend implementing authentication, authorization, RBAC, project management, permissions, and audit logging. Works with Spring Boot backend and is mobile-friendly.
 
 ## Tech stack
 - React 18 + Vite + Tailwind

@@ -1,8 +1,8 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/useAuth';
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
-  const { accessToken, signOut, profile } = useAuth();
+  const { accessToken, signOut, profile, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -14,13 +14,13 @@ function Navbar() {
     <header className="border-b bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         <Link to="/" className="text-lg font-semibold text-primary">
-          windsurf
+          User Auth
         </Link>
         <nav className="flex items-center gap-4 text-sm font-medium text-slate-700">
           <NavLink to="/" className={({ isActive }) => (isActive ? 'text-accent' : '')}>
             Home
           </NavLink>
-          {accessToken && (
+          {(accessToken || user) && (
             <>
               <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'text-accent' : '')}>
                 Dashboard
@@ -45,14 +45,15 @@ function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-slate-700 hover:text-accent">
-                Log in
+              <Link to="/login">
+                <button className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-800 hover:bg-slate-100">
+                  Log in
+                </button>
               </Link>
-              <Link
-                to="/signup"
-                className="rounded-md bg-accent px-3 py-1.5 text-sm font-semibold text-white shadow hover:shadow-md"
-              >
-                Sign up
+              <Link to="/signup">
+                <button className="rounded-md bg-accent px-3 py-1.5 text-sm font-semibold text-white shadow hover:shadow-md">
+                  Sign up
+                </button>
               </Link>
             </>
           )}
